@@ -37,7 +37,8 @@ class RegisterController extends AbstractController
                         ->setPseudo($_POST["pseudo"])
                         ->setFirstname($_POST["firstname"])
                         ->setLastname($_POST["lastname"])
-                        ->setCreatedAt(new \DateTimeImmutable());
+                        ->setCreatedAt(new \DateTimeImmutable())
+                        ->setRoles("ROLE_USER");
                     //Test si le compte n'existe pas déja
                     if ($this->userRepository->isUserExists($_POST["email"], $_POST["pseudo"])) {
                         //Hash du passwords
