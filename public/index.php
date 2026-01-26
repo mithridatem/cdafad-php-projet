@@ -7,9 +7,11 @@ session_start();
 include '../vendor/autoload.php';
 //import des controllers
 use App\Controller\HomeController;
+use App\Controller\RegisterController;
 
 //instancier les controllers
 $homeController = new HomeController();
+$registerController = new RegisterController();
 
 //Analyse de l'URL avec parse_url() et retourne ses composants
 $url = parse_url($_SERVER['REQUEST_URI']);
@@ -22,10 +24,13 @@ switch ($path) {
         $homeController->index();
         break;
     case '/login':
-        echo "login";
+        $registerController->login();
         break;
     case '/register':
-        echo "enregistrement";
+        $registerController->register();
+        break;
+    case '/logout':
+        $registerController->logout();
         break;
     default:
         echo "erreur 404";
