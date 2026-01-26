@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Entity;
+use App\Entity\EntityInterface;
 use App\Database\Mysql;
 
 abstract class AbstractRepository
@@ -16,10 +16,10 @@ abstract class AbstractRepository
     }
 
     //Méthodes
-    public abstract function find(int $id): ?Entity;
+    public abstract function find(int $id): ?EntityInterface;
 
     public abstract function findAll(): array;
 
-    public abstract function save(Entity $entity): ?Entity;
+    public abstract function save(EntityInterface $entity): ?EntityInterface;
 
 }

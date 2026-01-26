@@ -2,4 +2,4 @@
 
 namespace App\Entity;
 
-interface Entity {}
+interface EntityInterface {}
