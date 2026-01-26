@@ -12,9 +12,11 @@ email VARCHAR(50) NOT NULL,
 `password` VARCHAR(100) NOT NULL,
 `status` BOOL DEFAULT true,
 `active` BOOL DEFAULT true,
+`deleted` BOOL DEFAULT true,
 roles VARCHAR(50) NOT NULL,
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME,
+deleted_at DATETIME,
 media_id INT
 )ENGINE=InnoDB;
 
@@ -51,3 +53,7 @@ quizz_id INT NOT NULL,
 users_id INT NOT NULL
 )ENGINE=InnoDB;
 
+ALTER TABLE users
+ADD CONSTRAINT fk_add_media
+FOREIGN KEY(media_id)
+REFERENCES media(id);

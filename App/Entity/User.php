@@ -16,6 +16,7 @@ class User
     private bool $status = true;
     private bool $active = true;
     private bool $deleted = false;
+    private string $roles;
     private \DateTimeImmutable $createdAt;
     private ?\DateTimeImmutable $updatedAt;
     private ?\DateTimeImmutable $deletedAt;
@@ -89,6 +90,18 @@ class User
         return $this;
     }
 
+    public function getRoles(): string
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(string $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    
     public function isStatus(): bool
     {
         return $this->status;
