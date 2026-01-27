@@ -8,6 +8,9 @@
     <title><?= $title ?? "" ?></title>
 </head>
 <body>
+     <!-- Import du menu -->
+    <?php include 'components/component_navbar.php'; ?>
+    <main class="container-fluid">
     <main class="container-fluid">
         <h1>Ajouter une categorie : </h1>
         <form action="" method="post">
@@ -16,5 +19,7 @@
         </form>
         <p><?= $data["msg"] ?? ""  ?></p>
     </main>
+    <!-- Import du footer -->
+    <?php include 'components/component_footer.php'; ?>
 </body>
 </html>
