@@ -63,20 +63,18 @@ class UserRepository extends AbstractRepository
             $user = $req->fetch();
             if (empty($user)) {
                 return false;
-            } else {
-                return true;
-            }
-        } catch(\PDOException $e){
+            } 
+            return true;
+        } catch(\PDOException $e) {
             return false;
         }
-
     }
 
     public function findByEmail(string $email): ?User
     {
         try {
             //2 Ecrire la requête SQL
-            $sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.pseudo, u.password, u.roles, u.created_at AS createdAt 
+        $sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.pseudo, u.password, u.roles, u.created_at
             FROM users AS u WHERE u.email = ?";
             //3 Préparer la requête
             $req = $this->connect->prepare($sql);
@@ -85,8 +83,17 @@ class UserRepository extends AbstractRepository
             //5 exécuter la requête
             $req->execute();
             //6 récupérer la réponse (SELECT)
-            $user = $req->fetch(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+            //$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+            $user = $req->fetch(\PDO::FETCH_ASSOC);
+            //Hydratation en objet User
+            if (!empty($user)) {
+                $user = User::hydrate($user);
+            } else {
+                $user = null;
+            }
+
         } catch(\PDOException $e){
+            echo $e->getMessage();
             return null;
         }
         return $user;

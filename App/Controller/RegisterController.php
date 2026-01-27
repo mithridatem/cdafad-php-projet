@@ -6,7 +6,7 @@ use App\Controller\AbstractController;
 use App\Utils\Tools;
 use App\Repository\UserRepository;
 use App\Entity\User;
-use App\Entity\EntityInterface;
+use App\Entity\Entity;
 
 class RegisterController extends AbstractController
 {
@@ -17,6 +17,7 @@ class RegisterController extends AbstractController
     {
         $this->userRepository = new UserRepository();
     }
+
     //Méthode pour s'inscrire
     public function register(): mixed
     {
@@ -24,7 +25,12 @@ class RegisterController extends AbstractController
         //Test si le formulaire est submit
         if ($this->isFormSubmitted($_POST,  "submit")) {
             //Test si les champs sont remplis
-            if (!empty($_POST["pseudo"]) && !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm-password"])) {
+            if (
+                !empty($_POST["pseudo"]) &&
+                !empty($_POST["email"]) &&
+                !empty($_POST["password"]) &&
+                !empty($_POST["confirm-password"])
+            ) {
                 //test si les 2 mots de passe sont identiques
                 if ($_POST["password"] == $_POST["confirm-password"]) {
                     //Nettoyage des données
@@ -48,16 +54,15 @@ class RegisterController extends AbstractController
                         //ajout en BDD
                         $this->userRepository->save($user);
                         $data["msg"] = "Le compte a été ajouté en BDD";
-                    } else 
-                    {
-                         $data["msg"] = "Le compte existe déjà en BDD";
+                    } else {
+                        $data["msg"] = "Le compte existe déjà en BDD";
                     }
-                } 
+                }
                 //Sinon les champs ne sont pas identiques
                 else {
                     $data["msg"] = "Les mots de passe ne sont pas identiques";
                 }
-            } 
+            }
             //Sinon les champs ne sont pas remplis 
             else {
                 $data["msg"] = "Veuillez remplir les champs du formulaire";
@@ -69,7 +74,38 @@ class RegisterController extends AbstractController
     //Méthode pour se connecter
     public function login(): mixed
     {
-        return $this->render("login", "Se connecter");
+        $data = [];
+        //Test si le formulaire est soumis
+        if ($this->isFormSubmitted($_POST)) {
+            //Test si les champs sont remplis
+            if (!empty($_POST["email"]) && !empty($_POST["password"])) {
+                //Nettoyer les entrées utilisateurs
+                Tools::sanitize_array($_POST);
+                //Récupérer le compte user
+                $user = $this->userRepository->findByEmail($_POST["email"]);
+                //Test si le compte existe
+                if (isset($user)) {
+                    //test le password
+                    if (password_verify($_POST["password"], $user->getPassword())) {
+                        //Créer la session User
+                        $_SESSION["user"] = [
+                            "id" => $user->getId(),
+                            "email"=> $user->getEmail(),
+                            "pseudo"=> $user->getEmail(),
+                            "roles" => $user->getRoles()
+                        ];
+                        $data["msg"] = "Connecté";
+                    } else {
+                        $data["msg"] = "Les informations de connexion sont invalides";
+                    }
+                } else {
+                    $data["msg"] = "Les informations de connexion sont invalides";
+                }
+            } else {
+                $data["msg"] = "Veuillez remplir tous les champs du formulaire";
+            }
+        }
+        return $this->render("login", "Se connecter", $data);
     }
 
     //Méthode pour se connecter

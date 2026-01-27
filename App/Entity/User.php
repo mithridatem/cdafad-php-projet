@@ -179,4 +179,31 @@ class User extends Entity
         $this->media = $media;
         return $this;
     }
+
+    public function __set($name, $value)
+    {
+        if ($name== "created_at") {
+            $this->createdAt = new \DateTimeImmutable($value);
+        }
+    }
+
+    //Hydratation
+    public static function hydrate(array $data): self
+    {
+        $user = new User();
+        foreach ($data as $key => $value) {
+            if ($key == "created_at" || $key == "createdAt" ) {
+                $user->setCreatedAt(new \DateTimeImmutable($value));
+            }
+            else if ($key == "udpated_at" ||$key == "createdAt" ) {
+                $user->setUpdatedAt(new \DateTimeImmutable($value));
+            }
+            else if ($key == "deleted_at" || $key == "deletedAt") {
+                $user->setDeletedAt(new \DateTimeImmutable($value));
+            } else {
+                $user->$key = $value;
+            }
+        }
+        return $user;
+    }
 }
