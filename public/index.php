@@ -15,6 +15,7 @@ $dotenv->load();
 //import des controllers
 use App\Controller\HomeController;
 use App\Controller\RegisterController;
+use App\Controller\CategoryController;
 
 //instancier les controllers
 $homeController = new HomeController();
@@ -35,6 +36,9 @@ switch ($path) {
         break;
     case '/register':
         $registerController->register();
+        break;
+    case '/category/add':
+        $categoryController->addCategorie();
         break;
     case '/logout':
         $registerController->logout();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Controller;
 
 use App\Controller\AbstractController;
 use App\Service\CategoryService;
@@ -21,7 +21,7 @@ class CategoryController extends AbstractController
         if ($this->isFormSubmitted($_POST)) {
             $data["msg"] = $this->categoryService->saveCategory($_POST);
         }
-        
+
         return $this->render("add_category", "Ajouter une categorie", $data);
     }
 }
