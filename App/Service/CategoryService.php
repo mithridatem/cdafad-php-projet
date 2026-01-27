@@ -26,13 +26,14 @@ class CategoryService
             return "Veuillez remplir tous les champs du formulaire.";
         }
 
-        //Nettoyage
+        //Nettoyage (super globale $_POST)
         Tools::sanitize_array($post);
 
         //Test si la catégorie existe déja
         if ($this->categoryRepository->isUserExists($post["name"])) {
             return "La catégorie " . $post["name"] . " existe déjà en BDD.";
         }
+        
         //Création d'un objet Category
         $category = new Category($_POST["name"]);
         $category->setCreatedAt(new \DateTimeImmutable());
