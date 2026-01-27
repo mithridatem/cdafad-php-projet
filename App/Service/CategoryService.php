@@ -6,6 +6,8 @@ use App\Entity\Entity;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Utils\Tools;
+use Mithridatem\Validation\Exception\ValidationException;
+use Mithridatem\Validation\Validator;
 
 class CategoryService
 {
@@ -38,6 +40,15 @@ class CategoryService
         $category = new Category($_POST["name"]);
         $category->setCreatedAt(new \DateTimeImmutable());
         
+        //Validation de l'entité Category
+        try {
+            $validator = new Validator();
+            $validator->validate($category);
+
+        } catch(ValidationException $ve) {
+            return $ve->getMessage();
+        }
+
         //Ajout en BDD
         $this->categoryRepository->save($category);
 

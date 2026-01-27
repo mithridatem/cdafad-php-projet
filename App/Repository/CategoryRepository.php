@@ -34,9 +34,8 @@ class CategoryRepository extends AbstractRepository
             //6 récupérer l'id
             $id = $this->connect->lastInsertId();
             $entity->setId($id);
-        }
-        catch(\Exception $e){
-            echo $e->getMessage();
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur d'enregistrement");
         }
         return $entity;
     }
@@ -54,12 +53,13 @@ class CategoryRepository extends AbstractRepository
             $req->execute();
             //6 récupérer la réponse (SELECT)
             $category = $req->fetch();
+            //Test si n'existe pas (tableau vide)
             if (empty($category)) {
                 return false;
-            } 
-            return true;
-        } catch(\PDOException $e) {
-            return false;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception("Erreur d'enregistrement");
         }
+        return true;
     }
-}   
+}
