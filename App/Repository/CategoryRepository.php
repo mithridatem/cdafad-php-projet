@@ -15,7 +15,20 @@ class CategoryRepository extends AbstractRepository
 
     public function findAll(): array
     {
-        return [];
+        try {
+            //1 Ecrire la requête
+            $sql = "SELECT c.id, c.name, c.created_at FROM category AS c ORDER BY c.name";
+            //2 préparer la requête
+            $req = $this->connect->prepare($sql);
+            //3 exécuter la requête
+            $req->execute();
+            //4 récupérer les données (fetchAll)
+            $req->setFetchMode(\PDO::FETCH_CLASS| \PDO::FETCH_PROPS_LATE, Category::class);
+            $categories = $req->fetchAll();
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur SQL");
+        }
+        return $categories;
     }
 
     public function save(Entity $entity): ?Category
@@ -41,7 +54,7 @@ class CategoryRepository extends AbstractRepository
         return $entity;
     }
 
-    public function isUserExists(string $name): bool
+    public function isCategoryExists(string $name): bool
     {
         try {
             //2 Ecrire la requête SQL

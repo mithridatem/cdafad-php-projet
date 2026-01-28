@@ -24,4 +24,10 @@ class CategoryController extends AbstractController
 
         return $this->render("add_category", "Ajouter une categorie", $data);
     }
+
+    public function showAllCategories(): mixed
+    {
+        $categories = $this->categoryService->getAllCategories();
+        return $this->renderComponent("all_categories", $categories);
+    }
 }

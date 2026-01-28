@@ -182,7 +182,7 @@ class User extends Entity
 
     public function __set($name, $value)
     {
-        if ($name== "created_at") {
+        if ($name == "created_at") {
             $this->createdAt = new \DateTimeImmutable($value);
         }
     }

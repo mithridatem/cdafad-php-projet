@@ -41,6 +41,9 @@ switch ($path) {
     case '/category/add':
         $categoryController->addCategorie();
         break;
+    case '/category/all':
+        $categoryController->showAllCategories();
+        break;
     case '/logout':
         $registerController->logout();
         break;

@@ -14,7 +14,7 @@ class Category extends Entity
 
 
     //Constructeur
-    public function __construct(string $name)
+    public function __construct(string $name = "")
     {
         $this->name = $name;
     }
@@ -63,6 +63,16 @@ class Category extends Entity
     {
         $this->updatedAt = $updatedAt;
         return $this;
+    }
+
+    public function __set($name, $value)
+    {
+        if ($name == "created_at") {
+            $this->createdAt = new \DateTimeImmutable($value);
+        } 
+        if ($name == "udpated_at") {
+            $this->updatedAt = new \DateTimeImmutable($value);
+        }
     }
 
     public static function hydrate(array $data): self 

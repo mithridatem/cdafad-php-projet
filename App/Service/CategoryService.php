@@ -30,7 +30,7 @@ class CategoryService
         Tools::sanitize_array($post);
 
         //Test si la catégorie existe déja
-        if ($this->categoryRepository->isUserExists($post["name"])) {
+        if ($this->categoryRepository->isCategoryExists($post["name"])) {
             return "La catégorie " . $post["name"] . " existe déjà en BDD.";
         }
         
@@ -43,4 +43,11 @@ class CategoryService
 
         return "La catégorie a été ajouté en BDD.";
     }
+
+    public function getAllCategories(): string|array
+    {
+        $categories = $this->categoryRepository->findAll();
+        return empty($categories)? 'liste vide' : $categories;
+    }
+
 }

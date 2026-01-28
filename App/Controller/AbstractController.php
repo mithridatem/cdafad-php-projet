@@ -15,7 +15,18 @@ abstract class AbstractController
     {
         include __DIR__ . "/../../templates/template_" . $template . ".php";
     }
-
+    
+    /**
+     * Méthode pour rendre une vue avec un template
+     * @param string $compoent Le nom du component à inclure
+     * @param array $data Les données à passer au component
+     * @return void
+     */
+    public function renderComponent(string $component, array $data = []): void
+    {
+        include __DIR__ . "/../../templates/components/component_" . $component . ".php";
+    }
+    
     /**
      * Méthode pour envoyer une réponse JSON
      * @param array $data Les données à encoder en JSON
