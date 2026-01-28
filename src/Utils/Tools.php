@@ -43,7 +43,7 @@ class Tools
      * @param string $file nom du fichier
      * @return string extension du fichier
      */
-    public static function getFileExtension($file)
+    public static function getFileExtension(string $file)
     {
         return substr(strrchr($file, '.'), 1);
     }
