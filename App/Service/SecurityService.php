@@ -119,13 +119,18 @@ class SecurityService
             return ["errors" => ["_form" => "Les informations de connexion sont invalides"]];
         }
 
+        //Initialisation des roles
+        $roles = explode(',', $user->getRoles());
+
+        //Stockage des informations en session
         $_SESSION["user"] = [
             "id" => $user->getId(),
             "email" => $user->getEmail(),
             "pseudo" => $user->getPseudo(),
-            "roles" => $user->getRoles(),
+            "roles" => $roles,
             "img" => $user->getMedia()
         ];
+        
         return ["message" => "Connecte"];
     }
 }
