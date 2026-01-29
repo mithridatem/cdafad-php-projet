@@ -47,26 +47,42 @@ class UploadService
         move_uploaded_file($uploadTmp, $uploadtarget);
         return $newName;
     }
+
     /**
-     * Méthode pour tester si l'image à bien été uploadé
-     * @param string $name (nom du fichier)
-     * @return string Nom de l'image uploadée
+     * Méthode pour tester si l'image à bien été uploadée
+     * @param array $files (données du fichier)
+     * @return bool Vrai si le fichier a été uploadé correctement, faux sinon
      */
-    private function isFileUploadCorrectly($files): bool
+    private function isFileUploadCorrectly(array $files): bool
     {
         return !isset($files["tmp_name"]) || empty($files["tmp_name"]);
     }
 
+    /**
+     * Méthode pour valider la taille de l'upload
+     * @param array $files (données du fichier)
+     * @return bool Vrai si la taille est trop importante, faux sinon
+     */
     private function validateUploadSize(array $files): bool
     {
         return $files["size"] > self::UPLOAD_SIZE_MAX;
     }
 
+    /**
+     * Méthode pour valider le format de l'upload
+     * @param string $ext (extension du fichier)
+     * @return bool Vrai si le format est valide, faux sinon
+     */
     private function validateUploadFormat(string $ext): bool
     {
         return in_array($ext, self::UPLOAD_FORMAT_WHITE_LIST);
     }
 
+    /**
+     * Méthode pour renommer le fichier
+     * @param string $ext (extension du fichier)
+     * @return string Nouveau nom du fichier
+     */
     private function renameFile(string $ext): string
     {
         return uniqid() . "." . $ext;

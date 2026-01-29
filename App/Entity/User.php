@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use App\Entity\Media;
 use App\Entity\Entity;
+use Mithridatem\Validation\Attributes\NotBlank;
+use Mithridatem\Validation\Attributes\Email;
+use Mithridatem\Validation\Attributes\Length;
+use Mithridatem\Validation\Attributes\Pattern;
 
 class User extends Entity
 {
@@ -11,8 +15,14 @@ class User extends Entity
     private ?int $id;
     private ?string $firstname;
     private ?string $lastname;
+    #[NotBlank]
+    #[Length(2,50)]
     private string $pseudo;
+    #[NotBlank]
+    #[Email]
     private string $email;
+    #[NotBlank]
+    #[Pattern('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{12,}$/')]
     private string $password;
     private bool $status = true;
     private bool $active = true;

@@ -7,6 +7,8 @@ use App\Entity\User;
 use App\Entity\Media;
 use App\Utils\Tools;
 use App\Repository\UserRepository;
+use Mithridatem\Validation\Validator;
+use Mithridatem\Validation\Exception\ValidationException;
 
 class SecurityService
 {
@@ -27,47 +29,56 @@ class SecurityService
      */
     public function saveUser(array $post): string
     {
-         //Test si les champs ne sont pas remplis
-            if (
-                empty($_POST["pseudo"]) ||
-                empty($_POST["email"]) ||
-                empty($_POST["password"]) ||
-                empty($_POST["confirm-password"])
-            ) {
-                return "Veuillez remplir les champs du formulaire"; 
-            }
+        //Test si les champs ne sont pas remplis
+        if (
+            empty($_POST["pseudo"]) ||
+            empty($_POST["email"]) ||
+            empty($_POST["password"]) ||
+            empty($_POST["confirm-password"])
+        ) {
+            return "Veuillez remplir les champs du formulaire";
+        }
+        
+        //Nettoyage des données
+        Tools::sanitize_array($_POST);
 
-            //Sinon si les 2 mots de passe sont différents
-            if ($_POST["password"] != $_POST["confirm-password"]) {
-                return "Les mots de passe ne sont pas identiques";
-            }
+        //Sinon si les 2 mots de passe sont différents
+        if ($_POST["password"] != $_POST["confirm-password"]) {
+            return "Les mots de passe ne sont pas identiques";
+        }
 
-            //Nettoyage des données
-            Tools::sanitize_array($_POST);
+        //Test si le compte existe déja
+        if ($this->userRepository->isUserExists($_POST["email"], $_POST["pseudo"])) {
+            return "Le compte existe déjà en BDD";
+        }
 
-            //Test si le compte existe déja
-            if ($this->userRepository->isUserExists($_POST["email"], $_POST["pseudo"])) {
-                return "Le compte existe déjà en BDD";
-            }
+        //créer un objet User
+        $user = new User();
+        //Set des attributs
+        $user
+            ->setEmail($_POST["email"])
+            ->setPseudo($_POST["pseudo"])
+            ->setFirstname($_POST["firstname"])
+            ->setLastname($_POST["lastname"])
+            ->setPassword($_POST["password"])
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setRoles("ROLE_USER");
+        try {
+            //Instance du Validator
+            $validator = new Validator();
+            $validator->validate($user);
 
-            //créer un objet User
-            $user = new User();
-            //Set des attributs
-            $user
-                ->setEmail($_POST["email"])
-                ->setPseudo($_POST["pseudo"])
-                ->setFirstname($_POST["firstname"])
-                ->setLastname($_POST["lastname"])
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setRoles("ROLE_USER");
+        } catch(ValidationException $e) {
+            return $e->getMessage();
+        }
 
-            //Hash du passwords
-            $hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
-            $user->setPassword($hash);
+        //Hash du passwords
+        $hash = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+        $user->setPassword($hash);
 
-            //ajout en BDD
-            $this->userRepository->save($user);
-            return "Le compte a été ajouté en BDD";
+        //ajout en BDD
+        $this->userRepository->save($user);
+        return "Le compte a été ajouté en BDD";
     }
 
     /**
@@ -75,7 +86,7 @@ class SecurityService
      * @param array $post (super globale POST)
      * @return string $message de sortie
      */
-    public function authenticate(array $post): string 
+    public function authenticate(array $post): string
     {
         //Test si les champs sont remplis
         if (empty($_POST["email"]) || empty($_POST["password"])) {
@@ -95,8 +106,8 @@ class SecurityService
         //Créer la session User
         $_SESSION["user"] = [
             "id" => $user->getId(),
-            "email"=> $user->getEmail(),
-            "pseudo"=> $user->getEmail(),
+            "email" => $user->getEmail(),
+            "pseudo" => $user->getEmail(),
             "roles" => $user->getRoles()
         ];
         return "Connecté";

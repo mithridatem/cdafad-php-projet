@@ -14,16 +14,30 @@ class HomeController extends AbstractController
     {
         $this->uploadService = new UploadService();
     }
+
+    /**
+     * Méthode d'affichage de la page d'accueil
+     * @return mixed
+     */
     public function index(): mixed
     {
         return $this->render("home", "Accueil");
     }
 
+    /**
+     * Méthode de test (param url)
+     * @param int $nbr
+     * @return void
+     */
     public function test(int $nbr)
     {
         echo "valeur saisie " . $nbr;
     }
 
+    /**
+     * Méthode de test d'upload de fichier
+     * @return mixed
+     */
     public function testUpload(): mixed
     {
         $data = [];
