@@ -3,12 +3,15 @@
 namespace App\Service;
 
 use App\Utils\Tools;
-use App\Service\UploadException;
+use App\Service\Exception\UploadException;
 
 class UploadService
 {
+    /**
+     * Constante du Service
+     */
     private const string UPLOAD_DIRECTORY = "assets/img/";
-    private const int UPLOAD_SIZE_MAX = 2097152;//2Mo soit 1024 *1024 *2
+    private const int UPLOAD_SIZE_MAX = 2097152;//2Mo soit 1024 * 1024 *2
     private const array UPLOAD_FORMAT_WHITE_LIST = ["png", "jpeg", "jpg", "webp"];
 
     /**

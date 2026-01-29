@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AbstractController;
-use App\Service\UploadException;
+use App\Service\Exception\UploadException;
 use App\Service\UploadService;
 
 class HomeController extends AbstractController

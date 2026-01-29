@@ -23,8 +23,8 @@ class UserRepository extends AbstractRepository
     {
         try {
             //2 Ecrire la requête SQL
-            $sql = "INSERT INTO users(firstname, lastname, pseudo, email, `password`, roles, created_at)
-            VALUE(?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO users(firstname, lastname, pseudo, email, `password`, roles, created_at, media_id)
+            VALUE(?,?,?,?,?,?,?,?)";
             //3 Préparer la requête
             $req = $this->connect->prepare($sql);
             //4 Assigner les paarmètres(bindParam)
@@ -35,6 +35,7 @@ class UserRepository extends AbstractRepository
             $req->bindValue(5, $entity->getPassword(), \PDO::PARAM_STR);
             $req->bindValue(6, $entity->getRoles(), \PDO::PARAM_STR);
             $req->bindValue(7, $entity->getCreatedAt()->format('Y-m-d'), \PDO::PARAM_STR);
+            $req->bindValue(8, $entity->getMedia()->getId(), \PDO::PARAM_INT);
             //5 exécuter la requête
             $req->execute();
             //6 récupérer l'id

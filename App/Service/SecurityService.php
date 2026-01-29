@@ -9,16 +9,19 @@ use App\Utils\Tools;
 use App\Repository\UserRepository;
 use Mithridatem\Validation\Validator;
 use Mithridatem\Validation\Exception\ValidationException;
+use App\Service\MediaService;
 
 class SecurityService
 {
     //Attribut
     private UserRepository $userRepository;
+    private MediaService $mediaService;
 
     //Constructeur
     public function __construct()
     {
         $this->userRepository = new UserRepository();
+        $this->mediaService = new MediaService();
     }
 
     //Méthodes
@@ -75,7 +78,14 @@ class SecurityService
         //Hash du passwords
         $hash = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         $user->setPassword($hash);
+        try {
+           $media = $this->mediaService->addMedia($_FILES["img"]);
+        } catch(\Exception $e) {
 
+        }
+
+        $user->setMedia($media);
+        
         //ajout en BDD
         $this->userRepository->save($user);
         return "Le compte a été ajouté en BDD";
