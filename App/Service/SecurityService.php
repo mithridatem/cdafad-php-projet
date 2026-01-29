@@ -81,11 +81,11 @@ class SecurityService
         try {
            $media = $this->mediaService->addMedia($_FILES["img"]);
         } catch(\Exception $e) {
-
+            echo $e->getMessage();
         }
 
         $user->setMedia($media);
-        
+
         //ajout en BDD
         $this->userRepository->save($user);
         return "Le compte a été ajouté en BDD";
