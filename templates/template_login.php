@@ -20,9 +20,9 @@
             <?php if (!empty($errors["_form"])) : ?>
                 <p class="error"><?= htmlspecialchars((string)$errors["_form"], ENT_QUOTES) ?></p>
             <?php endif; ?>
-            <input type="text" name="email" placeholder="Saisir votre email">
+            <input type="text" name="email" placeholder="Saisir votre email" value="<?= htmlspecialchars((string)($data["email"] ?? ""), ENT_QUOTES) ?>">
             <small class="error"><?= htmlspecialchars((string)($errors["email"] ?? ""), ENT_QUOTES) ?></small>
-            <input type="password" name="password" placeholder="Sasir votre mot de passe">
+            <input type="password" name="password" placeholder="Saisir votre mot de passe" value="<?= htmlspecialchars((string)($data["password"] ?? ""), ENT_QUOTES) ?>">
             <small class="error"><?= htmlspecialchars((string)($errors["password"] ?? ""), ENT_QUOTES) ?></small>
             <input type="submit" value="Se connecter" name="submit">
             <p class="success"><?= htmlspecialchars((string)($data["msg"] ?? ""), ENT_QUOTES) ?></p>
