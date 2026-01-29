@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Entity\Media;
 use App\Utils\Tools;
 use App\Repository\QuizzRepository;
+use Mithridatem\Validation\Validator;
+use Mithridatem\Validation\Exception\ValidationException;
 
 class QuizzService
 {
@@ -40,6 +42,14 @@ class QuizzService
         
         //Création de l'objet Quizz
         $quizz = $this->createQuizz($post);
+
+        //Validation de l'entity Quizz
+        try {
+            $validator = new Validator();
+            $validator->validate($quizz);
+        } catch(ValidationException $e) {
+            return $e->getMessage();
+        }
 
         //Ajout en BDD
         $this->quizzRepository->save($quizz);

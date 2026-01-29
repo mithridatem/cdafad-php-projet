@@ -6,12 +6,18 @@ use App\Entity\Entity;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\Category;
+use Mithridatem\Validation\Attributes\NotBlank;
+use Mithridatem\Validation\Attributes\Length;
 
 class Quizz extends Entity
 {
     //Attributs
     private ?int $id;
+    #[NotBlank]
+    #[Length(2,50)]
     private string $title;
+    #[NotBlank]
+    #[Length(3,255)]
     private string $description;
     private \DateTimeImmutable $createdAt;
     private ?\DateTimeImmutable $updatedAt;
