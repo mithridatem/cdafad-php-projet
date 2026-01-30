@@ -9,14 +9,18 @@ use App\Utils\Tools;
 use App\Repository\QuizzRepository;
 use Mithridatem\Validation\Validator;
 use Mithridatem\Validation\Exception\ValidationException;
+use App\Service\MediaService;
+use App\Utils\Logger;
 
 class QuizzService
 {
     private QuizzRepository $quizzRepository;
+    private MediaService $mediaService;
 
     public function __construct()
     {
         $this->quizzRepository = new QuizzRepository();
+        $this->mediaService = new MediaService(); 
     }
 
     /**
@@ -46,8 +50,10 @@ class QuizzService
 
         Tools::sanitize_array($post);
         
+        //Hydratation en Objet Quizz
         $quizz = $this->createQuizz($post);
 
+        //Validation
         try {
             $validator = new Validator();
             $validator->validate($quizz);
@@ -55,7 +61,24 @@ class QuizzService
             return ["errors" => ["_form" => $e->getMessage()]];
         }
 
+        //Test si l'image existe
+        if (isset($_FILES["img"]) && !empty($_FILES["img"]["tmp_name"])) {
+            try {
+                $media = $this->mediaService->addMedia($_FILES["img"]);
+            } catch(\Exception $e) {
+                Logger::error("SecurityService.addMedia failed", ["error" => $e->getMessage()]);
+                return ["errors" => ["img" => "Erreur lors de l'upload de l'image"]];
+            }
+        } else {
+            $media = $this->mediaService->getDefaultImg(3);
+        }
+
+        //Setter l'image du quizz
+        $quizz->setMedia($media);
+
+        // Persistance en BDD
         $saved = $this->quizzRepository->save($quizz);
+        
         if ($saved === null) {
             return ["errors" => ["_form" => "Erreur lors de l'ajout du quizz"]];
         }

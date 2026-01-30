@@ -35,8 +35,8 @@ class MediaService
         return $saved;
     }
 
-    public function getDefaultImg(): ?Media 
+    public function getDefaultImg(int $id): ?Media 
     {
-        return $this->mediaRepository->find(1);
+        return $this->mediaRepository->find($id);
     }
 }

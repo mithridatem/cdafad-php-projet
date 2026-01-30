@@ -2,9 +2,8 @@
 
 session_start();
 
-//gérer les routes
-
 include '../vendor/autoload.php';
+
 //Import des ressources
 use Dotenv\Dotenv;
 use Mithridatem\Routing\Route;
@@ -19,6 +18,7 @@ $dotenv->load();
 
 //Déclarer les routes
 $router = new Router();
+
 //Initialiser les rôles de l'utilisateur
 if (!isset($_SESSION["user"]["roles"])) {
     $_SESSION["user"]["roles"]  = ['ROLE_PUBLIC'];
@@ -43,6 +43,7 @@ $router->map(Route::controller('POST', '/quizz/add', App\Controller\QuizzControl
 $router->map(Route::controller('GET', '/logout', App\Controller\RegisterController::class, 'logout', ['ROLE_USER', 'ROLE_ADMIN']));
 $router->map(Route::controller('GET', '/upload', App\Controller\HomeController::class, 'testUpload'));
 $router->map(Route::controller('POST', '/upload', App\Controller\HomeController::class, 'testUpload'));
+
 try {
     $router->dispatch();
 } catch (RouteNotFoundException $re) {

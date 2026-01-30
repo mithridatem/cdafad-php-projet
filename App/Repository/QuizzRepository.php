@@ -37,8 +37,8 @@ class QuizzRepository extends AbstractRepository
     {
         try {
             //1 Ecrire la requête
-            $sql = "INSERT INTO quizz(title, `description`, created_at, author_id)
-            VALUE(?,?,?,?)";
+            $sql = "INSERT INTO quizz(title, `description`, created_at, author_id, media_id)
+            VALUE(?,?,?,?,?)";
             //2 préparer la requête
             $req = $this->connect->prepare($sql);
             //3 Assigner les paramètres (bindValue)
@@ -46,6 +46,8 @@ class QuizzRepository extends AbstractRepository
             $req->bindValue(2, $entity->getDescription(), \PDO::PARAM_STR);
             $req->bindValue(3, $entity->getCreatedAt()->format("Y-m-d"), \PDO::PARAM_STR);
             $req->bindValue(4, $entity->getAuthor()->getId(), \PDO::PARAM_INT);
+            $req->bindValue(5, $entity->getMedia()->getId(), \PDO::PARAM_INT);
+            
             //4 Exécuter la requête
             $req->execute();
             

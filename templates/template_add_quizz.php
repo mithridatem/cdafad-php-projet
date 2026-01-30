@@ -6,14 +6,14 @@
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <link rel="stylesheet" href="assets/style/main.css">
+    <link rel="stylesheet" href="../assets/style/main.css">
     <title><?= $title ?? "" ?></title>
 </head>
 <body>
     <!-- Import du menu -->
     <?php include 'components/component_navbar.php'; ?>
     <main class="container-fluid">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <?php $errors = $data["errors"] ?? []; ?>
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string)($data["csrf_token"] ?? ""), ENT_QUOTES) ?>">
             <h1>Ajouter un quizz</h1>
@@ -26,6 +26,8 @@
             <small class="error"><?= htmlspecialchars((string)($errors["description"] ?? ""), ENT_QUOTES) ?></small>
             <?php include 'components/component_all_categories.php';?>
             <small class="error"><?= htmlspecialchars((string)($errors["categories"] ?? ""), ENT_QUOTES) ?></small>
+            <input type="file" name="img">
+            <small class="error"><?= htmlspecialchars((string)($errors["img"] ?? ""), ENT_QUOTES) ?></small>
             <input type="submit" value="Ajouter" name="submit">
             <p class="success"><?= htmlspecialchars((string)($data["msg"] ?? ""), ENT_QUOTES) ?></p>
         </form>

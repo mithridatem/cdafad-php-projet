@@ -75,6 +75,8 @@ class SecurityService
 
         $hash = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         $user->setPassword($hash);
+        
+        //Import de l'image
         if (isset($_FILES["img"]) && !empty($_FILES["img"]["tmp_name"])) {
             try {
                 $media = $this->mediaService->addMedia($_FILES["img"]);
@@ -83,9 +85,9 @@ class SecurityService
                 return ["errors" => ["img" => "Erreur lors de l'upload de l'image"]];
             }
         } else {
-            $media = $this->mediaService->getDefaultImg();
+            $media = $this->mediaService->getDefaultImg(1);
         }
-        
+        //Set du media au user
         $user->setMedia($media);
 
         if ($this->userRepository->save($user) === null) {
