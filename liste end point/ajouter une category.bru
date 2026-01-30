@@ -1,0 +1,22 @@
+meta {
+  name: ajouter une category
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://127.0.0.1:8000/api/category
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name":"api23"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -5,7 +5,7 @@ namespace App\Entity;
 use Mithridatem\Validation\Attributes\NotBlank;
 use Mithridatem\Validation\Attributes\Length;
 
-class Category extends Entity
+class Category extends Entity implements \JsonSerializable
 {
     private ?int $id;
     #[NotBlank]
@@ -87,5 +87,23 @@ class Category extends Entity
             }
         }
         return $category;
+    }
+
+    /**
+     * Méthode pour sérialiser en JSON Une Categorie
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->id ?? null,
+            "name" => $this->name ?? null,
+            "createdAt" => isset($this->createdAt)
+                ? $this->createdAt->format("Y-m-d H:i:s")
+                : null,
+            "updatedAt" => isset($this->updatedAt)
+                ? $this->updatedAt?->format("Y-m-d H:i:s")
+                : null,
+        ];
     }
 }

@@ -46,6 +46,8 @@ $router->map(Route::controller('POST', '/upload', App\Controller\HomeController:
 $router->map(Route::controller('GET', '/profil', App\Controller\RegisterController::class, 'showProfil', ['ROLE_USER', 'ROLE_ADMIN']));
 $router->map(Route::controller('GET', '/api/test', App\Controller\Api\TestApiController::class, 'testJson'));
 $router->map(Route::controller('POST', '/api/test', App\Controller\Api\TestApiController::class, 'testJsonUpload'));
+$router->map(Route::controller('GET', '/api/categories', App\Controller\Api\CategoryController::class, 'getAllCategories'));
+$router->map(Route::controller('POST', '/api/category', App\Controller\Api\CategoryController::class, 'addCategory'));
 
 try {
     $router->dispatch();

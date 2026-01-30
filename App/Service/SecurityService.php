@@ -125,11 +125,7 @@ class SecurityService
 
         //Initialisation des roles
         $roles = explode(',', $user->getRoles());
-        //Objet Media associé
-        $media = ["id"=>$user->getMedia()?->getId(),
-                  "url"=>$user->getMedia()?->getUrl(),
-                  "alt"=>$user->getMedia()?->getAlt()
-                ];
+        
         //Stockage des informations en session
         $_SESSION["user"] = [
             "id" => $user->getId(),
@@ -138,7 +134,7 @@ class SecurityService
             "email" => $user->getEmail(),
             "pseudo" => $user->getPseudo(),
             "roles" => $roles,
-            "img"  => $media
+            "img"  => $user->getMedia()
         ];
         
         return ["message" => "Connecte"];

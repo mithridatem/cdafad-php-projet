@@ -82,4 +82,28 @@ class Media extends Entity
             $this->createdAt = new \DateTimeImmutable($value);
         }
     }
+
+    public function __serialize(): array
+    {
+        return [
+            "id"=> isset($this->id) ? $this->id : null,
+            "url"=> $this->url,
+            "alt"=> $this->alt,
+            "alt"=> $this->alt,
+            "createdAt" => isset($this->createdAt)
+                ? $this->createdAt->format("Y-m-d H:i:s")
+                : null,
+            "updatedAt" => isset($this->updatedAt)
+                ? $this->updatedAt?->format("Y-m-d H:i:s")
+                : null,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->url = $data['url'];
+        $this->alt = $data['alt'];
+        $this->setCreatedAt($data['created_at']);
+        $this->setUpdatedAt($data['created_at']);
+    }
 }

@@ -44,7 +44,8 @@ class CategoryService
             return ["errors" => ["_form" => "Erreur lors de l'ajout de la categorie"]];
         }
 
-        return ["message" => "La categorie a ete ajoutee en BDD"];
+        return ["message" => "La categorie a ete ajoutee en BDD",
+        "category"=> $category];
     }
 
     public function getAllCategories(): array
